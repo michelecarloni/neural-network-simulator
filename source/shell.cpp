@@ -94,7 +94,7 @@ void Shell::analyzeCommand()
     {
         returnType = this->callBack(commandParsed);
         if(returnType == 2)
-            std::cout << "ERROR: " << "this comand shouldn't take any arguments" << std::endl;
+            std::cout << "ERROR: " << "this comand doesn't require any arguments" << std::endl;
     }
     else if(this->validCommandExit(commandParsed))
     {
@@ -109,6 +109,8 @@ void Shell::analyzeCommand()
             std::cout << "ERROR: " << commandParsed[3] << " had already been created" << std::endl;
         else if (returnType == 3)
             std::cout << "ERROR: " << "spaces between the name" << std::endl;
+        else if (returnType == 4)
+            std::cout << "ERROR: " << "no name inserted" << std::endl;
         return;
     }
     else if (this->validCommandNets(commandParsed))
@@ -134,30 +136,30 @@ void Shell::analyzeCommand()
     {
         returnType = this->callAddInputLayer(commandParsed);
         if (returnType == 1)
-            std::cout << "Input layer succesfully added" << std::endl; 
+            std::cout << "input layer succesfully added" << std::endl; 
         else if(returnType == 2)
-            std::cout << "ERROR: " << "Input layer already present" << std::endl;
+            std::cout << "ERROR: " << "input layer already present" << std::endl;
         else if (returnType == 3)
-            std::cout << "ERROR: " << "No argument" << std::endl;
+            std::cout << "ERROR: " << "no argument" << std::endl;
         else if (returnType == 4)
-            std::cout << "ERROR: " << "Invalid argument" << std::endl; 
+            std::cout << "ERROR: " << "invalid argument" << std::endl; 
         else if (returnType == 5)
-            std::cout << "ERROR: " << "Neural net not selected" << std::endl;
+            std::cout << "ERROR: " << "neural net not selected" << std::endl;
         return;
     }
     else if (this->validCommandAddHiddenLayer(commandParsed))
     {
         returnType = this->callAddHiddenLayer(commandParsed);
         if (returnType == 1)
-            std::cout << "Hidden layer succesfully added" << std::endl;
+            std::cout << "hidden layer succesfully added" << std::endl;
         else if(returnType == 2)
-            std::cout << "ERROR: " << "Missing input layer" << std::endl;
+            std::cout << "ERROR: " << "missing input layer" << std::endl;
         else if (returnType == 3)
             std::cout << "ERROR: " << "incorrect number of arguments" << std::endl;
         else if (returnType == 4)
-            std::cout << "ERROR: " << "Invalid argument" << std::endl;
+            std::cout << "ERROR: " << "invalid argument" << std::endl;
         else if (returnType == 5)
-            std::cout << "ERROR: " << "Neural net not selected" << std::endl;
+            std::cout << "ERROR: " << "neural net not selected" << std::endl;
         else if (returnType == 6)
             std::cout << "ERROR: " << "activation function inexistent" << std::endl;
         return;
@@ -166,7 +168,7 @@ void Shell::analyzeCommand()
     {
         returnType = this->callAddOutputLayer(commandParsed);
         if (returnType == 1)
-            std::cout << "Output layer succesfully created" << std::endl;
+            std::cout << "output layer succesfully created" << std::endl;
         else if (returnType == 2)
             std::cout << "ERROR: " << "input layer and hidden layer missing" << std::endl; 
         else if (returnType == 3)
@@ -176,9 +178,9 @@ void Shell::analyzeCommand()
         else if (returnType == 5)
             std::cout << "ERROR: " << "incorrect number of arguments" << std::endl;
         else if (returnType == 6)
-            std::cout << "ERROR: " << "Invalid argument" << std::endl;
+            std::cout << "ERROR: " << "invalid argument" << std::endl;
         else if (returnType == 7)
-            std::cout << "ERROR: " << "Neural net not selected" << std::endl;
+            std::cout << "ERROR: " << "neural net not selected" << std::endl;
         else if (returnType == 8)
             std::cout << "ERROR: " << "activation function inexistent" << std::endl;
         return;
@@ -188,23 +190,25 @@ void Shell::analyzeCommand()
     else if (this->validCommandComputeAllValues(commandParsed))
     {
         returnType = this->callComputeAllValues(commandParsed);
+        if (returnType == 1)
+            std::cout << "values succesfully computed" << std::endl;
         if(returnType == 2)
-            std::cout << "ERROR: " << "Input layer missing" << std::endl;
+            std::cout << "ERROR: " << "input layer missing" << std::endl;
         else if(returnType == 3)
-            std::cout << "ERROR: " << "Hidden layer missing" << std::endl;
+            std::cout << "ERROR: " << "hidden layer missing" << std::endl;
         else if(returnType == 4)
-            std::cout << "ERROR: " << "Output layer missing" << std::endl;
+            std::cout << "ERROR: " << "output layer missing" << std::endl;
         else if(returnType == 5)
-            std::cout << "ERROR: " << "Neural net not selected" << std::endl;
+            std::cout << "ERROR: " << "neural net not selected" << std::endl;
         return;
     }
     else if (this->validCommandPrintNet(commandParsed))
     {
         returnType = this->callPrintNet(commandParsed);
         if(returnType == 2)
-            std::cout << "ERROR: " << "Too many arguments" << std::endl;
+            std::cout << "ERROR: " << "too many arguments" << std::endl;
         else if(returnType == 3)
-            std::cout << "ERROR: " << "No neural net with this name" << std::endl;
+            std::cout << "ERROR: " << "no neural net with this name" << std::endl;
         return;
     }
     else
@@ -381,6 +385,8 @@ int Shell::callCreateNeuralNet(vectorString& commandParsed)
 {
     if (commandParsed.size() > 4)
         return 3;
+    if (commandParsed.size() == 3)
+        return 4;
     std::string neuralNetName = commandParsed[3];
     if(checkNameNeuralNetAlreadyUsed(neuralNetName))
     {
@@ -448,8 +454,6 @@ int Shell::callSelect(vectorString& commandParsed)
 
 int Shell::callAddInputLayer(vectorString& commandParsed)
 {
-    if (commandParsed.size() == 3)
-        return 3;
 
     State& refState = this->getState();
     NeuralNet* refSelectedNeuralNet = refState.getSelectedNeuralNet();
@@ -458,6 +462,9 @@ int Shell::callAddInputLayer(vectorString& commandParsed)
 
     if (refSelectedNeuralNet == nullptr)
         return 5;
+
+    if (commandParsed.size() == 3)
+        return 3;
 
     for (int i = 3; i < commandParsed.size(); i++)
     {
@@ -479,8 +486,6 @@ int Shell::callAddInputLayer(vectorString& commandParsed)
 
 int Shell::callAddHiddenLayer(vectorString& commandParsed)
 {
-    if (commandParsed.size() != 5)
-        return 3;
     State& refState = this->getState();
     NeuralNet* refSelectedNeuralNet = refState.getSelectedNeuralNet();       
     int totNeurons;
@@ -489,6 +494,9 @@ int Shell::callAddHiddenLayer(vectorString& commandParsed)
 
     if (refSelectedNeuralNet == nullptr)
         return 5;
+
+    if (commandParsed.size() != 5)
+        return 3;
 
     try
     {
@@ -508,8 +516,6 @@ int Shell::callAddHiddenLayer(vectorString& commandParsed)
 
 int Shell::callAddOutputLayer(vectorString& commandParsed)
 {
-    if(commandParsed.size() != 5)
-        return 5;
     State& refState = this->getState();
     NeuralNet* refSelectedNeuralNet = refState.getSelectedNeuralNet();       
     int totNeurons;
@@ -518,6 +524,9 @@ int Shell::callAddOutputLayer(vectorString& commandParsed)
 
     if (refSelectedNeuralNet == nullptr)
         return 7;
+
+    if(commandParsed.size() != 5)
+        return 5;
 
     try
     {
