@@ -1,1 +1,1 @@
-wait for the next update
+wait for the next updates
