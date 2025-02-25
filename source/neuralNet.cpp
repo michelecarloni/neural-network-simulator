@@ -123,6 +123,21 @@ bool NeuralNet::checkOutputLayerAlreadyPresent()
     }
 }
 
+bool NeuralNet::checkHiddenLayerAldreadyPresentGivenindex(int index)
+{
+    // checking if the index refering to the input layer
+    if (index == 0)
+        return false;
+
+    // checking if the index is refering the output layer
+    vectorLayer& refLayerVec = this->getLayerVec();
+    int lastIndex = refLayerVec.size() - 1;
+    Layer& refLastLayer = refLayerVec[lastIndex];
+    if (index == lastIndex && refLastLayer.getType() == Layer::outputType)
+        return false;
+    return true;
+}
+
 
 int NeuralNet::addInputLayer(std::vector<float>& values, int size)
 {
@@ -193,6 +208,83 @@ int NeuralNet::addOutputLayer(int totNeurons, std::string actFunction)
     return 1;
 }
 
+// replace input layer only if it is already present
+// bis there is a hidden layer the function computes also the values
+int NeuralNet::replaceInputLayer(std::vector<float>& values, int size)
+{
+    if (!this->checkInputLayerAlreadyPresent())
+        return 2;
+
+    vectorLayer& refLayerVec = this->getLayerVec();
+    Layer newInputLayer("input_layer_0", Layer::inputType, "");
+
+    for (float value : values)
+    {
+        Neuron neuron(value, 0);
+        newInputLayer.addNeuron(neuron);
+    }
+    refLayerVec[0] = newInputLayer;
+
+    if (refLayerVec.size() >= 2)
+    {
+        this->computeWeightsGivenThePreviousLayer(refLayerVec[0], refLayerVec[1]);
+    }
+
+    return 1;
+}
+
+// replace hidden layer only if it is already present (based on the index)
+int NeuralNet::replaceHiddenLayer(int totNeurons, std::string actFunction, int index)
+{
+    if (!this->checkHiddenLayerAldreadyPresentGivenindex(index))
+        return 2;
+    
+    std::string name = "hidden_layer_" + std::to_string(index);
+    Layer newHiddenLayer(name, Layer::hiddenType, actFunction);
+
+    for(int i = 0; i < totNeurons; i++)
+    {
+        float bias = Util::generateRandomBias();
+        Neuron neuron(0.0, bias);
+        newHiddenLayer.addNeuron(neuron);
+    }
+    
+    vectorLayer& refLayerVec = this->getLayerVec();
+    refLayerVec[index] = newHiddenLayer;
+    Layer& prevLayer = refLayerVec[index-1];
+    prevLayer.deleteWeightsForAllNeurons();
+    this->computeWeightsGivenThePreviousLayer(prevLayer, refLayerVec[index]);
+    if (index < (refLayerVec.size() - 1))
+    {
+        Layer& nextLayer = refLayerVec[index + 1];
+        this->computeWeightsGivenThePreviousLayer(refLayerVec[index], nextLayer);
+    }
+    this->computeAllValues(index);
+    return 1;
+}
+
+
+int NeuralNet::replaceOutputLayer(int totNeurons, std::string actFunction)
+{
+    if (!this->checkOutputLayerAlreadyPresent())
+        return 2;
+    vectorLayer& refLayerVec = this->getLayerVec();
+    int lastIndex = refLayerVec.size() - 1;
+    std::string name = "output_layer_" + std::to_string(lastIndex);
+    Layer newOutputLayer(name, Layer::outputType, actFunction);
+    for (int i = 0; i < totNeurons; i++)
+    {
+        Neuron neuron(0.0, 0.0);
+        newOutputLayer.addNeuron(neuron);
+    }
+    refLayerVec[lastIndex] = newOutputLayer;
+    Layer& prevLayer = refLayerVec[lastIndex - 1];
+    prevLayer.deleteWeightsForAllNeurons();
+    this->computeWeightsGivenThePreviousLayer(prevLayer, refLayerVec[lastIndex]);
+    this->computeAllValues(lastIndex);
+    return 1;
+}
+
 
 // it takes the last layer in the layerVec of the current neural network and
 // it computes one weight for each neuron in it
@@ -206,7 +298,24 @@ void NeuralNet::computeWeights()
     {
         float weight = Util::generateRandomWeight();
         Neuron& neuron = refNeuronVec[i];
-        neuron.addWeight(weight);
+        neuron.addSingleWeight(weight);
+    }
+}
+
+
+void NeuralNet::computeWeightsGivenThePreviousLayer(Layer& currentLayer, Layer& nextLayer)
+{
+    vectorNeuron& refNeuronVecNextLayer = nextLayer.getNeuronVec();
+    int totNeuronsNextLayer = refNeuronVecNextLayer.size();
+
+    vectorNeuron& refNeuronVecCurrentLayer = currentLayer.getNeuronVec();
+    for (Neuron& n : refNeuronVecCurrentLayer)
+    {
+        for (int i = 0; i < totNeuronsNextLayer; i++)
+        {
+            float weight = Util::generateRandomWeight();
+            n.addSingleWeight(weight);
+        }
     }
 }
 
@@ -226,6 +335,27 @@ int NeuralNet::computeAllValues()
     vectorLayer& refLayerVec = this->getLayerVec();
     int totLayers = this->getTotLayers();
     for (int i = 1; i < totLayers; i++)
+    {
+        Layer& prevLayer = refLayerVec[i-1];
+        Layer& currentLayer = refLayerVec[i];
+        computeValuesGivenThePreviousLayer(prevLayer, currentLayer);
+    }
+    return 1;
+}
+
+
+int NeuralNet::computeAllValues(int index)
+{
+    if (!this->checkInputLayerAlreadyPresent())
+        return 2;
+    if (!this->checkAtLeastOneHiddenLayerAlreadyPresent())
+        return 3;
+    if (!this->checkOutputLayerAlreadyPresent())
+        return 4;
+
+    vectorLayer& refLayerVec = this->getLayerVec();
+    int totLayers = this->getTotLayers();
+    for (int i = index; i < totLayers; i++)
     {
         Layer& prevLayer = refLayerVec[i-1];
         Layer& currentLayer = refLayerVec[i];

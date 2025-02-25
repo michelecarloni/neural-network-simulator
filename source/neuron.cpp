@@ -39,18 +39,33 @@ void Neuron::printNeuron(int index)
 
     std::cout << '\t' << index << ") value: " << std::fixed << std::setprecision(4) << value << "\t" << "bias: " << std::fixed << std::setprecision(4) << bias << "\t" << "[ ";
 
-    for (float weight : refWeightVec)
+    if (refWeightVec.size() <= 10)
     {
-        std::cout << std::fixed << std::setprecision(4) << weight << ", ";
+        for (float weight : refWeightVec)
+        {
+            std::cout << std::fixed << std::setprecision(4) << weight << ", ";
+        }
+    }
+    else
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            std::cout << std::fixed << std::setprecision(4) << refWeightVec[i] << ", ";
+        }  
+        std::cout << std::fixed << std::setprecision(4) << "..." << ", ";
+        for (int i = refWeightVec.size() - 5; i < refWeightVec.size(); i++)
+        {
+            std::cout << std::fixed << std::setprecision(4) << refWeightVec[i] << ", ";
+        }  
     }
     std::cout << "]" << '\n';
 }
 
 
-void Neuron::addWeight(float weight) { this->weightVec.push_back(weight); }
+void Neuron::addSingleWeight(float weight) { this->weightVec.push_back(weight); }
 
 
-void Neuron::deleteWeight(int index)
+void Neuron::deleteSingleWeight(int index)
 {
     vectorWeight& tempWeightVec = getWeightVec();
     int size = tempWeightVec.size();
@@ -70,3 +85,9 @@ void Neuron::deleteWeight(int index)
 }
 
 
+void Neuron::deleteAllWeights()
+{
+    vectorWeight& refWeightVec = this->getWeightVec();
+    refWeightVec.clear();
+    refWeightVec.shrink_to_fit();
+}

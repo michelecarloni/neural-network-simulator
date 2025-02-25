@@ -42,6 +42,7 @@ class Layer
         void addNeuron(Neuron neuron);
         void removeNeuron(int index);
         void useActivationFunction(float& value);
+        void deleteWeightsForAllNeurons();
 };
 
 #endif

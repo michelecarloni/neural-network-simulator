@@ -100,9 +100,9 @@ void Shell::analyzeCommand()
     {
         this->callExit();
     }
-    else if(this->validCommandCreateNeuralNet(commandParsed))
+    else if(this->validCommandCreateNet(commandParsed))
     {
-        returnType = this->callCreateNeuralNet(commandParsed);
+        returnType = this->callCreateNet(commandParsed);
         if (returnType == 1)
             std::cout << "new neural network succesfully created" << std::endl;
         else if (returnType == 2)
@@ -211,6 +211,69 @@ void Shell::analyzeCommand()
             std::cout << "ERROR: " << "no neural net with this name" << std::endl;
         return;
     }
+    else if (this->validCommandReplaceInputLayer(commandParsed))
+    {
+        returnType = this->callReplaceInputLayer(commandParsed);
+        if (returnType == 1)
+            std::cout << "input layer succesfully replaced" << std::endl;
+        else if (returnType == 2)
+            std::cout << "ERROR: " << "input layer not present" << std::endl;
+        else if (returnType == 3)
+            std::cout << "ERROR: " << "neural net not selected" << std::endl;
+        else if (returnType == 4)
+            std::cout << "ERROR: " << "no argument found" << std::endl;
+        else if (returnType == 5)
+            std::cout << "ERROR: " << "invalid argument" << std::endl;
+        return;
+    }
+    else if (this->validCommandReplaceHiddenLayer(commandParsed))
+    {
+        returnType = this->callReplaceHiddenLayer(commandParsed);
+        if (returnType == 1)
+            std::cout << "hidden layer succesfully replaced" << std::endl; 
+        else if(returnType == 2)
+            std::cout << "ERROR: " << "no hidden layer found with this index" << std::endl;
+        else if (returnType == 3)
+            std::cout << "ERROR: " << "neural net not selected" << std::endl;
+        else if (returnType == 4)
+            std::cout << "ERROR: " << "no argument found" << std::endl;
+        else if (returnType == 5)
+            std::cout << "ERROR: " << "invalid argument" << std::endl;
+        else if (returnType == 6)
+            std::cout << "ERROR: " << "index out of range" << std::endl;
+        else if (returnType == 7)
+            std::cout << "ERROR: " << "activation function inexistent" << std::endl;
+    }
+    else if (this->validCommandReplaceOutputLayer(commandParsed))
+    {
+        returnType = this->callReplaceOutputLayer(commandParsed);
+        if (returnType == 1)
+            std::cout << "output layer succesfully replaced" << std::endl; 
+        else if(returnType == 2)
+            std::cout << "ERROR: " << "no output layer found" << std::endl;
+        else if (returnType == 3)
+            std::cout << "ERROR: " << "neural net not selected" << std::endl;
+        else if (returnType == 4)
+            std::cout << "ERROR: " << "no argument found" << std::endl;
+        else if (returnType == 5)  
+            std::cout << "ERROR: " << "invalid argument" << std::endl;
+        else if (returnType == 6)
+            std::cout << "ERROR: " << "activation function inexistent" << std::endl;
+        return;
+    }
+    else if (this->validCommandRenameNet(commandParsed))
+    {
+        returnType = this->callRenameNet(commandParsed);
+        if (returnType == 1)
+            std::cout << "net renamed correctly" << std::endl;
+        else if (returnType == 2)
+            std::cout << "ERROR: " << "not enough argument" << std::endl;
+        else if (returnType == 3)
+            std::cout << "ERROR: " << "too many arguments" << std::endl;
+        else if (returnType == 4)
+            std::cout << "ERROR: " << "no neural net with this name" << std::endl;
+        return;
+    }
     else
     {
         std::cout << "ERROR: non-existent command" << std::endl; 
@@ -243,15 +306,14 @@ bool Shell::validCommandExit(vectorString& commandParsed)
 }
 
 
-bool Shell::validCommandCreateNeuralNet(vectorString& commandParsed)
+bool Shell::validCommandCreateNet(vectorString& commandParsed)
 {
-    if (commandParsed.size() < 3)
+    if (commandParsed.size() < 2)
         return false;
 
     std::string word_0 = commandParsed[0];
     std::string word_1 = commandParsed[1];
-    std::string word_2 = commandParsed[2];
-    if (Util::strLower(word_0) == "create" && Util::strLower(word_1) == "neural" && Util::strLower(word_2) == "net")
+    if (Util::strLower(word_0) == "create"&& Util::strLower(word_1) == "net")
         return true;
     return false;
 }
@@ -364,6 +426,60 @@ bool Shell::validCommandPrintNet(vectorString& commandParsed)
 }
 
 
+bool Shell::validCommandReplaceInputLayer(vectorString& commandParsed)
+{
+    if (commandParsed.size() < 3)
+        return false;
+    std::string word_0 = commandParsed[0];
+    std::string word_1 = commandParsed[1];
+    std::string word_2 = commandParsed[2];
+
+    if (Util::strLower(word_0) == "replace" && Util::strLower(word_1) == "input" && Util::strLower(word_2) == "layer")
+        return true;
+    return false;
+}
+
+bool Shell::validCommandReplaceHiddenLayer(vectorString& commandParsed)
+{
+    if (commandParsed.size() < 3)
+        return false;
+    std::string word_0 = commandParsed[0];
+    std::string word_1 = commandParsed[1];
+    std::string word_2 = commandParsed[2];
+
+    if (Util::strLower(word_0) == "replace" && Util::strLower(word_1) == "hidden" && Util::strLower(word_2) == "layer")
+        return true;
+    return false;
+}
+
+
+bool Shell::validCommandReplaceOutputLayer(vectorString& commandParsed)
+{
+    if (commandParsed.size() < 3)
+        return false;
+    std::string word_0 = commandParsed[0];
+    std::string word_1 = commandParsed[1];
+    std::string word_2 = commandParsed[2];
+
+    if (Util::strLower(word_0) == "replace" && Util::strLower(word_1) == "output" && Util::strLower(word_2) == "layer")
+        return true;
+    return false;
+}
+
+
+bool Shell::validCommandRenameNet(vectorString& commandParsed)
+{
+    if (commandParsed.size() < 2)
+        return false;
+    std::string word_0 = commandParsed[0];
+    std::string word_1 = commandParsed[1];
+
+    if (Util::strLower(word_0) == "rename" && Util::strLower(word_1) == "net")
+        return true;
+    return false;
+}
+
+
 int Shell::callBack(vectorString& commandParsed)
 {
     if (commandParsed.size() > 1)
@@ -381,13 +497,13 @@ int Shell::callExit()
 }
 
 
-int Shell::callCreateNeuralNet(vectorString& commandParsed)
+int Shell::callCreateNet(vectorString& commandParsed)
 {
-    if (commandParsed.size() > 4)
+    if (commandParsed.size() > 3)
         return 3;
-    if (commandParsed.size() == 3)
+    if (commandParsed.size() == 2)
         return 4;
-    std::string neuralNetName = commandParsed[3];
+    std::string neuralNetName = commandParsed[2];
     if(checkNameNeuralNetAlreadyUsed(neuralNetName))
     {
         return 2;
@@ -562,7 +678,7 @@ int Shell::callPrintNet(vectorString& commandParsed)
     if (commandParsed.size() > 3)
         return 2;
     State& refState = this->getState();
-    vectorNeuralNet refNeuralNetVec = refState.getNeuralNetVec();
+    vectorNeuralNet& refNeuralNetVec = refState.getNeuralNetVec();
     std::string inputNetName = commandParsed[2];
     for (NeuralNet& nn : refNeuralNetVec)
     {
@@ -573,6 +689,116 @@ int Shell::callPrintNet(vectorString& commandParsed)
         }
     }
     return 3;
+}
+
+
+int Shell::callReplaceInputLayer(vectorString& commandParsed)
+{
+    State& refState = this->getState();
+    NeuralNet* refSelectedNeuralNet = refState.getSelectedNeuralNet();
+    if (refSelectedNeuralNet == nullptr)
+        return 3;
+    if (commandParsed.size() == 3)
+        return 4;
+
+    std::vector<float> valueVec;
+
+    for (int i = 3; i < commandParsed.size(); i++)
+    {
+        try
+        {
+            float value = std::stof(commandParsed[i]);
+            valueVec.push_back(value);
+        }
+        catch (...)
+        {
+            return 5;
+        }
+    }
+    return refSelectedNeuralNet->replaceInputLayer(valueVec, valueVec.size());
+}
+
+
+int Shell::callReplaceHiddenLayer(vectorString& commandParsed)
+{
+    State& refState = this->getState();
+    NeuralNet* refSelectedNeuralNet = refState.getSelectedNeuralNet();
+    vectorLayer& refLayerVec = refSelectedNeuralNet->getLayerVec();
+    int totNeurons;  
+    std::string actFunction;  
+    int index;
+    if (refSelectedNeuralNet == nullptr)
+        return 3;
+    if (commandParsed.size() == 3)
+        return 4;
+
+    try
+    {
+        totNeurons = std::stoi(commandParsed[3]);  
+        actFunction = commandParsed[4];  
+        index = std::stoi(commandParsed[5]);
+    }
+    catch (...)
+    {
+        return 5;
+    }
+    
+    if (index < 0 || index >= refLayerVec.size())
+        return 6;
+    if(!Functions::checkFunctionExist(actFunction))
+        return 7;
+
+    return refSelectedNeuralNet->replaceHiddenLayer(totNeurons, actFunction, index); 
+}
+
+
+int Shell::callReplaceOutputLayer(vectorString& getCommandParsed)
+{
+    State& refState = this->getState();
+    NeuralNet* refSelectedNeuralNet = refState.getSelectedNeuralNet();
+    vectorLayer& refLayerVec = refSelectedNeuralNet->getLayerVec();
+    int totNeurons;  
+    std::string actFunction;  
+    if (refSelectedNeuralNet == nullptr)
+        return 3;
+    if (commandParsed.size() == 3)
+        return 4;
+
+    try
+    {
+        totNeurons = std::stoi(commandParsed[3]);  
+        actFunction = commandParsed[4];
+    }
+    catch (...)
+    {
+        return 5;
+    }
+    if(!Functions::checkFunctionExist(actFunction))
+        return 6;
+    return refSelectedNeuralNet->replaceOutputLayer(totNeurons, actFunction); 
+}
+
+
+int Shell::callRenameNet(vectorString& commandParsed)
+{
+    if (commandParsed.size() < 4)
+        return 2;
+    if (commandParsed.size() > 4)
+        return 3;
+    State& refState = this->getState();
+    vectorNeuralNet& refNeuralNetVec = refState.getNeuralNetVec();
+
+    std::string oldName = commandParsed[2];
+    std::string newName = commandParsed[3];
+    for (NeuralNet& nn : refNeuralNetVec)
+    {
+        if (oldName == nn.getName())
+        {
+            nn.setName(newName);
+            return 1;
+        }
+    }
+    return 4;
 }
 
 

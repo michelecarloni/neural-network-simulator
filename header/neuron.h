@@ -27,9 +27,9 @@ class Neuron
 
         // METHODS
         void printNeuron(int index = 0);
-        void addWeight(float weight);
-        void deleteWeight(int index);
-
+        void addSingleWeight(float weight);
+        void deleteSingleWeight(int index);
+        void deleteAllWeights();
 };
 
 #endif

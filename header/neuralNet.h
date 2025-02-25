@@ -34,12 +34,19 @@ class NeuralNet
         bool checkInputLayerAlreadyPresent();
         bool checkAtLeastOneHiddenLayerAlreadyPresent();
         bool checkOutputLayerAlreadyPresent();
+        bool checkHiddenLayerAldreadyPresentGivenindex(int index);
         int addInputLayer(std::vector<float>& values, int size);       // 'true' -> input layer added. 'false' -> input layer not added because is already present
         int addHiddenLayer(int totNeurons, std::string actFunction);                  
         int addOutputLayer(int totNeurons, std::string actFunction);
+        int replaceInputLayer(std::vector<float>& values, int size);
+        int replaceHiddenLayer(int totNeurons, std::string actFunction, int index);
+        int replaceOutputLayer(int totNeurons, std::string actFunction);
         void computeWeights();
+        void computeWeightsGivenThePreviousLayer(Layer& currentLayer, Layer& nextLayer);
         int computeAllValues();
-        void computeValuesGivenThePreviousLayer(Layer& prevLayer, Layer& currentLayer);   
+        int computeAllValues(int index);
+        void computeValuesGivenThePreviousLayer(Layer& prevLayer, Layer& currentLayer);  
+        void deleteWeightsForGivenLayer(Layer& layer); 
 };
 
 #endif

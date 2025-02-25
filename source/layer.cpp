@@ -49,10 +49,29 @@ void Layer::printLayer(int index)
     std::cout << index <<")\tNAME: " << name << "\t" << "TYPE: " << type << "\t" << "ACTIVATION FUNCTION: " << actFunction << '\n';
     std::cout << '\n';
 
-    for (int i = 0; i < totNeurons; i++)
+    if (totNeurons <= 10)
     {
-        Neuron& neuron = refNeuronVec[i];
-        neuron.printNeuron(i);
+        for (int i = 0; i < totNeurons; i++)
+        {
+            Neuron& neuron = refNeuronVec[i];
+            neuron.printNeuron(i);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Neuron& neuron = refNeuronVec[i];
+            neuron.printNeuron(i);
+        }
+        std::cout << "." << std::endl;
+        std::cout << "." << std::endl;
+        std::cout << "." << std::endl;
+        for (int i = totNeurons - 5; i < totNeurons; i++)
+        {
+            Neuron& neuron = refNeuronVec[i];
+            neuron.printNeuron(i);
+        }
     }
 }
 
@@ -93,4 +112,14 @@ void Layer::useActivationFunction(float& value)
         Functions::sigmoid(value);
     else if (actFunction == "tanh")
         Functions::tanh(value);
+}
+
+
+void Layer::deleteWeightsForAllNeurons()
+{
+    vectorNeuron& refNeuronVec = this->getNeuronVec();
+    for (Neuron& neuron : refNeuronVec)
+    {
+        neuron.deleteAllWeights();
+    }
 }

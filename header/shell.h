@@ -35,7 +35,7 @@ class Shell
         void analyzeCommand();
         bool validCommandBack(vectorString& commandParsed);
         bool validCommandExit(vectorString& commandParsed);
-        bool validCommandCreateNeuralNet(vectorString& commandParsed);
+        bool validCommandCreateNet(vectorString& commandParsed);
         bool validCommandNets(vectorString& commandParsed);
         bool validCommandLayers(vectorString& commandParsed);
         bool validCommandSelect(vectorString& commandParsed);
@@ -44,9 +44,14 @@ class Shell
         bool validCommandAddOutputLayer(vectorString& commandParsed);
         bool validCommandComputeAllValues(vectorString& commandParsed);
         bool validCommandPrintNet(vectorString& commandParsed);
+        bool validCommandReplaceInputLayer(vectorString& commandParsed);
+        bool validCommandReplaceHiddenLayer(vectorString& commandParsed);
+        bool validCommandReplaceOutputLayer(vectorString& commandParsed);
+        bool validCommandRenameNet(vectorString& commandParsed);
+
         int callBack(vectorString& commandParsed);
         int callExit();
-        int callCreateNeuralNet(vectorString& commandParsed);
+        int callCreateNet(vectorString& commandParsed);
         void callOutputAllNeuralNets();
         int callOutputAllLayers();
         int callSelect(vectorString& commandParsed);
@@ -55,6 +60,11 @@ class Shell
         int callAddOutputLayer(vectorString& commandParsed);
         int callComputeAllValues(vectorString& commandParsed);
         int callPrintNet(vectorString& commandParsed);
+        int callReplaceInputLayer(vectorString& commandParsed);
+        int callReplaceHiddenLayer(vectorString& commandParsed);
+        int callReplaceOutputLayer(vectorString& commandParsed);
+        int callRenameNet(vectorString& commandParsed);
+        
         bool checkNameNeuralNetAlreadyUsed(std::string name);
 };
 
