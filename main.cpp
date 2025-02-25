@@ -15,7 +15,4 @@ int main() {
         shell.readCommand();
     }
 
-    shell.endContext();
-
-    return 0;
 }
