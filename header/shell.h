@@ -65,6 +65,7 @@ class Shell
         int callReplaceOutputLayer(vectorString& commandParsed);
         int callRenameNet(vectorString& commandParsed);
         
+        bool checkEmptyCommand(vectorString& commandParsed);
         bool checkNameNeuralNetAlreadyUsed(std::string name);
 };
 

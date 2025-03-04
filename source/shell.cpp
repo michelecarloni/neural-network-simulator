@@ -45,19 +45,6 @@ void Shell::endContext()
 }
 
 
-void Shell::readCommand()
-{
-    std::string command;
-    State& refState = this->getState();
-    std::cout << refState.getCurrentAccess() << ">>" << "\t";
-    std::getline(std::cin, command);
-    this->setCommand(command);
-    vectorString vec = this->parseCommand();
-    this->setCommandParsed(vec);
-    this->analyzeCommand();
-}
-
-
 vectorString Shell::parseCommand()
 {
     std::string command = this->getCommand();
@@ -85,12 +72,29 @@ vectorString Shell::parseCommand()
 }
 
 
+void Shell::readCommand()
+{
+    std::string command;
+    State& refState = this->getState();
+    std::cout << refState.getCurrentAccess() << ">>" << "\t";
+    std::getline(std::cin, command);
+    this->setCommand(command);
+    vectorString vec = this->parseCommand();
+    this->setCommandParsed(vec);
+    this->analyzeCommand();
+}
+
+
 void Shell::analyzeCommand()
 {
     vectorString& commandParsed = this->getCommandParsed();
     int returnType;
 
-    if(this->validCommandBack(commandParsed))
+    if (this->checkEmptyCommand(commandParsed))
+    {
+        return;
+    }
+    else if(this->validCommandBack(commandParsed))
     {
         returnType = this->callBack(commandParsed);
         if(returnType == 2)
@@ -277,6 +281,7 @@ void Shell::analyzeCommand()
     else
     {
         std::cout << "ERROR: non-existent command" << std::endl; 
+        return;
     }
 
 }
@@ -799,6 +804,14 @@ int Shell::callRenameNet(vectorString& commandParsed)
         }
     }
     return 4;
+}
+
+
+bool Shell::checkEmptyCommand(vectorString& commandParsed)
+{
+    if (commandParsed.empty())
+        return true;
+    return false;
 }
 
 
