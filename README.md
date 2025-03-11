@@ -126,7 +126,7 @@ $\text{tanh}(x) = \frac{e^{x} - e^{-x}}{e^{x} + e^{-x}}$
 <br></br>
 
 - **softmax**\
-$\text{softmax}(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}$
+$\text{softmax}(x) = (\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}$
     <div align="left">
         <img src = "img/softmaxGraph.png" style = "width: 50%">
     </div> 
