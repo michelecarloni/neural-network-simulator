@@ -103,7 +103,7 @@ all the following commands currently work to interact with the system
 ## activation functions
 so far the system support the following activation functions:
 
-- **relu**
+- **relu**\
 $\text{ReLU}(x) = \max(0, x)$
     <div align="left">
         <img src = "img/reluGraph.png" style = "width: 50%">
@@ -118,14 +118,14 @@ $\text{sigmoid}(x) = \frac{1}{1 + e^{-x}}$
     </div>
 <br></br>
 
-- **tanh**
+- **tanh**\
 $\text{tanh}(x) = \frac{e^{x} - e^{-x}}{e^{x} + e^{-x}}$
     <div align="left">
         <img src = "img/tanhGraph.png" style = "width: 50%">
     </div> 
 <br></br>
 
-- **softmax**
+- **softmax**\
 $\text{softmax}(\mathbf{z})_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}$
     <div align="left">
         <img src = "img/softmaxGraph.png" style = "width: 50%">
