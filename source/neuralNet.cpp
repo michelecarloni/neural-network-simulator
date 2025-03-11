@@ -387,7 +387,20 @@ void NeuralNet::computeValuesGivenThePreviousLayer(Layer& prevLayer, Layer& curr
         // 'currentValue' must be going through an activation function.
         Neuron& currentNeuron = refNeuronVecCurrentLayer[i];
         currentValue += currentNeuron.getBias();
-        currentLayer.useActivationFunction(currentValue);
+        // currentLayer.useActivationFunction(currentValue, i);     // modify the value based on the activation function
         currentNeuron.setValue(currentValue);
     }
+
+    for (int i = 0; i < currentLayerTotNeurons; i++)
+    {
+        Neuron& currentNeuron = refNeuronVecCurrentLayer[i];
+        float currentValue = currentNeuron.getValue();
+        currentLayer.useActivationFunction(currentValue, i);
+        currentNeuron.setValue(currentValue);
+    }
+
+    // clean softmaxValuesVec
+    std::vector<float>& refSoftmaxValuesVec = Functions::getSoftmaxValuesVec();
+    refSoftmaxValuesVec.clear();
+    
 }

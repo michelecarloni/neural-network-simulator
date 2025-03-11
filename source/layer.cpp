@@ -103,7 +103,7 @@ void Layer::removeNeuron(int index)
 }
 
 
-void Layer::useActivationFunction(float& value)
+void Layer::useActivationFunction(float& value, int index)
 {
     std::string actFunction = this->getActFunction();
     if (actFunction == "relu")
@@ -112,6 +112,22 @@ void Layer::useActivationFunction(float& value)
         Functions::sigmoid(value);
     else if (actFunction == "tanh")
         Functions::tanh(value);
+    else if (actFunction == "softmax")
+    {
+        vectorNeuron& refNeuronVec = this->getNeuronVec();
+        std::vector<float>& refSoftmaxValuesVec = Functions::getSoftmaxValuesVec();
+        // if refSoftmaxValuesVec is empty populate it, else just call Functions::softmax;
+        // you also have to reset the vector to {} after all the neurons of the layer have been called for computing the function
+        if (refSoftmaxValuesVec.empty()) 
+        {
+            for (int i = 0; i < refNeuronVec.size(); i++)
+            {
+                float value = refNeuronVec[i].getValue();
+                refSoftmaxValuesVec.push_back(value);
+            }
+        }
+        Functions::softmax(value, refSoftmaxValuesVec, index);
+    }
 }
 
 

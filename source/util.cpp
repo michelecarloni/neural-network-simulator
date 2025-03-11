@@ -21,7 +21,7 @@ float Util::generateRandomBias()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dist(-10, 10);
+    std::uniform_real_distribution<float> dist(-0.1, 0.1);
 
     float bias = dist(gen);
     return bias;

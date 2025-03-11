@@ -2,9 +2,11 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <vector>
 
 
-const std::string Functions::arrActFunction[3] = {"relu", "sigmoid", "tanh"};
+const std::string Functions::arrActFunction[4] = {"relu", "sigmoid", "tanh", "softmax"};
+std::vector<float> Functions::softmaxValuesVec = {};
 
 void Functions::relu(float& num)
 {
@@ -22,6 +24,20 @@ void Functions::tanh(float& num)
     num = std::tanh(num);
 }
 
+void Functions::softmax(float& num, std::vector<float>& vecValues, int index)
+{
+    float numerator = vecValues[index];
+    float expNumerator = exp(numerator);
+    float denominator = 0;
+
+    for (float val : vecValues)
+    {
+        denominator += exp(val);
+    }
+
+    num = expNumerator / denominator;
+}
+
 bool Functions::checkFunctionExist(std::string funName)
 {
     for (const std::string func : Functions::arrActFunction)
@@ -31,3 +47,5 @@ bool Functions::checkFunctionExist(std::string funName)
     }
     return false;
 }
+
+std::vector<float>& Functions::getSoftmaxValuesVec() {return softmaxValuesVec;}

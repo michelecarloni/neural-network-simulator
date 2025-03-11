@@ -41,7 +41,7 @@ class Layer
         void printLayer(int index = 0);
         void addNeuron(Neuron neuron);
         void removeNeuron(int index);
-        void useActivationFunction(float& value);
+        void useActivationFunction(float& value, int index);
         void deleteWeightsForAllNeurons();
 };
 
