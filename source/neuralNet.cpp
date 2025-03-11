@@ -274,7 +274,8 @@ int NeuralNet::replaceOutputLayer(int totNeurons, std::string actFunction)
     Layer newOutputLayer(name, Layer::outputType, actFunction);
     for (int i = 0; i < totNeurons; i++)
     {
-        Neuron neuron(0.0, 0.0);
+        float bias = Util::generateRandomBias();
+        Neuron neuron(0.0, bias);
         newOutputLayer.addNeuron(neuron);
     }
     refLayerVec[lastIndex] = newOutputLayer;
