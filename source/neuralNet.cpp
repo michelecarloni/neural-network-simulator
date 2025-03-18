@@ -81,7 +81,7 @@ bool NeuralNet::checkAtLeastOneHiddenLayerAlreadyPresent()
     try
     {
         vectorLayer& refLayerVec = this->getLayerVec();
-        if (refLayerVec.empty())
+        if (refLayerVec.size() < 2)
             return false;
 
         Layer& refLayer = refLayerVec[1];
