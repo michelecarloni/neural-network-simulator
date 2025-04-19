@@ -15,7 +15,7 @@ class Neuron
 
     public:
         Neuron(float value, float bias);
-
+        
         // GETTERS
         float getValue();
         float getBias();
