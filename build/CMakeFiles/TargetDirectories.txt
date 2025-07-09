@@ -1,0 +1,3 @@
+C:/dev/NeuralNetworkInCpp/build/CMakeFiles/main.dir
+C:/dev/NeuralNetworkInCpp/build/CMakeFiles/edit_cache.dir
+C:/dev/NeuralNetworkInCpp/build/CMakeFiles/rebuild_cache.dir

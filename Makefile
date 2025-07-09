@@ -1,4 +1,4 @@
-BIN_DIR := bin
+BIN_DIR := build
 SRC_DIR := source
 TARGET := $(BIN_DIR)/main.exe
 

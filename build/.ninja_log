@@ -1,0 +1,11 @@
+# ninja log v6
+4	335	7737553008554759	CMakeFiles/main.dir/main.cpp.obj	b5ef522cd60c5da1
+14	580	7737555833810385	CMakeFiles/main.dir/main.cpp.obj	4d3334408e171801
+40	689	7737555834070381	CMakeFiles/main.dir/source/state.cpp.obj	ecbe855ad5134239
+18	781	7737555833850338	CMakeFiles/main.dir/source/functions.cpp.obj	45be0c2a54e05c2c
+29	786	7737555833960334	CMakeFiles/main.dir/source/neuron.cpp.obj	f50d53d1733b7aac
+22	880	7737555833890335	CMakeFiles/main.dir/source/layer.cpp.obj	de9aeebe164f97bf
+34	974	7737555834000350	CMakeFiles/main.dir/source/shell.cpp.obj	11f9a45015434a04
+25	980	7737555833920350	CMakeFiles/main.dir/source/neuralNet.cpp.obj	5c9b4b5ec29564a6
+45	997	7737555834390360	CMakeFiles/main.dir/source/util.cpp.obj	37204f8c444452ac
+997	1118	7737555843636960	main.exe	6aa220426f575120
